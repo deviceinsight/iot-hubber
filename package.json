@@ -1,0 +1,35 @@
+{
+	"name": "iot-hubber",
+	"version": "1.0.0",
+	"description": "Graphical IOT Hub Connection Client",
+	"main": "index.js",
+	"scripts": {
+		"prestart": "cp .env ./client/.env && yarn install && cd ./client && yarn install && cd ../server && yarn install",
+		"start": "concurrently --kill-others \"cd ./client && yarn start\" \"nodemon ./server\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@gitlab.device-insight.com:lamtec/iot-hubber.git"
+	},
+	"keywords": [
+		"iot",
+		"hub",
+		"azure",
+		"client",
+		"iot-hub"
+	],
+	"author": "jro, vhi",
+	"license": "ISC",
+	"devDependencies": {
+		"concurrently": "^4.1.0"
+	},
+	"dependencies": {
+		"body-parser": "^1.18.3",
+		"cors": "^2.8.5",
+		"dotenv": "^7.0.0",
+		"express": "^4.16.4",
+		"mqtt": "^2.18.8",
+		"multer": "^1.4.1",
+		"nodemon": "^1.18.11"
+	}
+}

@@ -1,0 +1,56 @@
+* {
+  font-family: 'Maven Pro';
+}
+
+html, body {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  // font-family: -apple-system, BlinkMacSystemFont, "Maven Pro", "Segoe UI", "Roboto", "Oxygen",
+  //   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  //   sans-serif;
+  // -webkit-font-smoothing: antialiased;
+  // -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.App {
+  font-family: 'Roboto';
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+
+  @for $i from 1 through 5 {
+    .row-#{$i} {
+      display: flex;
+      flex: $i;
+    }
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-bottom: 1px solid grey;
+
+    h1 {
+      color: white;
+      margin: 0;
+      padding: 5px 20px;
+      font-size: 16px;  
+      background-color: steelblue;
+    }
+
+    &-content {
+      flex: 1;
+    }
+  }
+}

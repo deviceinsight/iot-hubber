@@ -1,0 +1,143 @@
+.button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #aaa;
+    border: none;
+    border-radius: 4px;
+    max-width: 200px;
+    font-weight: bolder;
+    color: white;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: inset 0px 0px 2px 2px #666;
+    }
+    &.warn {
+        background-color: #aa0;
+        &:hover { box-shadow: inset 0px 0px 2px 2px #660; }
+    }
+    &.danger {
+        background-color: #a00;
+        &:hover { box-shadow: inset 0px 0px 2px 2px #600; }
+    }
+    &.success {
+        background-color: #0a0;
+        &:hover { box-shadow: inset 0px 0px 2px 2px #060; }
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    padding: 3px;
+    background-color: steelblue;
+    border-bottom: 2px solid black;
+
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.notification {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+
+    &.error {
+        background-color: #a00;
+    }
+    &.warning {
+        background-color: #aa0;
+    }
+    &.success {
+        background-color: #0a0;
+    }
+}
+
+.modal {
+    width: 600px;
+    box-shadow: 0px 1px 3px 0px #aaa;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    align-self: center;
+
+    &-title {
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        font-weight: 100;
+    }
+
+    &-content {
+        border-top: 2px solid #bbb;
+        background-color: #eee;
+    }
+}
+
+.labelledbox { 
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+
+    &-header { 
+        min-width: 250px;
+        font-size: 16px;
+        font-weight: bold;
+        padding-right: 10px;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.selection {
+    display: flex;
+    align-items: center;
+
+    .title {
+        padding-right: 20px;
+    }
+
+    select {
+        background-color: white;
+        user-select: none;
+        padding: 5px;
+
+        * {
+            padding: 5px;
+        }
+    }
+}
+
+.log-entry {
+    border-bottom: 1px solid #ddd;
+    > * {display: block; font-size: 12px;}
+
+    .sent {background-color: #0a0; color: white; font-weight: bold }
+    .topic {font-weight: bold}
+    .content {font-family: courier; margin: 0; white-space: normal}
+}
+
+.box {
+    padding: 20px
+}
+
+.messagebox {
+    max-height: 600px;
+    overflow-y: scroll;
+}

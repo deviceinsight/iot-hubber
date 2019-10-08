@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const port = process.env.REACT_APP_HTTP_PORT;
-axios.defaults.baseURL = `http://localhost:${port}`;
+axios.defaults.baseURL =
+	process.env.REACT_APP_API_BASE_URL || `http://localhost:${port}`;
 
 export const STATUS_CONNECTED = 'CONNECTED';
 
@@ -36,7 +37,7 @@ export const disconnect = clientId => {
 };
 
 export const produce = ({clientId, topic, content}) => {
-	const payload = content.replace(/\s/g, '');
+	const payload = content.replace(/\s+(?=([^"]*"[^"]*")*[^"]*$)/g, '');
 	return axios.post('/produce', {clientId, topic, content: payload});
 };
 

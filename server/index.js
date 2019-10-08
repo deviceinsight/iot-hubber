@@ -1,8 +1,8 @@
 const dotenv = require('dotenv').config();
 
 // GET ENV VARIABLES
-const port = process.env.REACT_APP_HTTP_PORT || 8080;
-const websocketPort = process.env.REACT_APP_WEBSOCKET_PORT || 80;
+const port = process.env.REACT_APP_HTTP_PORT || 8088;
+const websocketPort = process.env.REACT_APP_WEBSOCKET_PORT || 8089;
 const websocketTopic =
 	process.env.REACT_APP_WEBSOCKET_TOPIC || 'device-messages';
 const iotHubUrl = process.env.IOTHUB_URL || 'di-tech-2.azure-devices.net';
@@ -103,6 +103,10 @@ let socket = null;
 io.on('connection', s => {
 	console.log('Websocket connection established');
 	socket = s;
+});
+
+process.on('uncaughtException', function(err) {
+	console.log('Caught exception: ', err);
 });
 
 app.post('/consume', (req, res) => {

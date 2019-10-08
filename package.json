@@ -1,10 +1,11 @@
 {
 	"name": "iot-hubber",
-	"version": "1.0.0",
+	"version": "1.0.1-SNAPSHOT",
 	"description": "Graphical IOT Hub Connection Client",
 	"main": "index.js",
 	"scripts": {
-		"prestart": "cp .env ./client/.env && yarn install && cd ./client && yarn install && cd ../server && yarn install",
+		"predocker": "cp .env.docker ./client/.env && cp .env.docker ./server/.env && cd ./client && yarn install && yarn build && cd ../server && yarn install",
+		"prestart": "cp .env ./client/.env && cp .env ./server/.env && yarn install && cd ./client && yarn install && cd ../server && yarn install",
 		"start": "concurrently --kill-others \"cd ./client && yarn start\" \"nodemon ./server\""
 	},
 	"repository": {
@@ -24,12 +25,6 @@
 		"concurrently": "^4.1.0"
 	},
 	"dependencies": {
-		"body-parser": "^1.18.3",
-		"cors": "^2.8.5",
-		"dotenv": "^7.0.0",
-		"express": "^4.16.4",
-		"mqtt": "^2.18.8",
-		"multer": "^1.4.1",
 		"nodemon": "^1.18.11"
 	}
 }

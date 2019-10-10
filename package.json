@@ -1,6 +1,6 @@
 {
 	"name": "iot-hubber",
-	"version": "1.0.1-SNAPSHOT",
+	"version": "1.0.1",
 	"description": "Graphical IOT Hub Connection Client",
 	"main": "index.js",
 	"scripts": {

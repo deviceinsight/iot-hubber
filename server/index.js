@@ -14,7 +14,9 @@ const mqttConnector = require('./mqtt-connector');
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+	path: '/iot-hubber/api/socket.io/'
+});
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const cors = require('cors');

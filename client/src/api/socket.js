@@ -3,7 +3,9 @@ import io from 'socket.io-client';
 const port = process.env.REACT_APP_WEBSOCKET_PORT;
 const topic = process.env.REACT_APP_WEBSOCKET_TOPIC;
 
-const socket = io(`http://localhost:${port}`);
+const socket = io(`http://localhost:${port}`, {
+	path: '/iot-hubber/api/socket.io/'
+});
 
 export const subscribeToSocket = handler => {
 	socket.on(topic, data => {

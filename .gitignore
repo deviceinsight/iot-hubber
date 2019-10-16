@@ -1,3 +1,5 @@
 /node_modules
 /tmp/*
 .env
+yarn-error.log
+package-lock.json

@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const clientStore = require('./clientStore');
+const messageStore = require('./messageStore');
 
 const getSubscriptionTopic = clientId =>
 	`devices/${clientId}/messages/devicebound/#`;
@@ -71,6 +72,7 @@ const consume = ({clientId, callback}) => {
 
 		client.on('message', (topic, message) => {
 			callback(message.toString());
+			messageStore.addMessage(clientId, JSON.parse(message.toString()));
 		});
 	});
 };
@@ -112,9 +114,19 @@ const publish = ({clientId, topic, content}) => {
 	});
 };
 
+const getMessages = ({clientId}) => {
+	return messageStore.getMessages(clientId);
+};
+
+const resetMessages = ({clientId}) => {
+	return messageStore.resetMessages(clientId);
+};
+
 module.exports = {
 	connect,
 	disconnect,
 	publish,
-	consume
+	consume,
+	getMessages,
+	resetMessages
 };

@@ -113,7 +113,9 @@ process.on('uncaughtException', function(err) {
 
 app.post('/consume', (req, res) => {
 	const {clientId} = req.body;
-	const callback = message => socket.emit(websocketTopic, message);
+	const callback = message => {
+		socket.emit(websocketTopic, message);
+	};
 
 	mqttConnector
 		.consume({clientId, callback})
@@ -123,6 +125,24 @@ app.post('/consume', (req, res) => {
 			});
 		})
 		.catch(err => handleError('CONSUMING ERROR', err, res));
+});
+
+app.get('/messages/:urn', (req, res) => {
+	const clientId = req.params.urn;
+
+	res.json({
+		messages: mqttConnector.getMessages({clientId}) || []
+	});
+});
+
+app.delete('/messages/:urn', (req, res) => {
+	const clientId = req.params.urn;
+
+	mqttConnector.resetMessages({clientId});
+
+	res.json({
+		status: 'MESSAGES_DELETED'
+	});
 });
 
 // START SERVER

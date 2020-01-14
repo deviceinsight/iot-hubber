@@ -71,8 +71,9 @@ const consume = ({clientId, callback}) => {
 		});
 
 		client.on('message', (topic, message) => {
-			callback(message.toString());
+			console.log('Received message');
 			messageStore.addMessage(clientId, JSON.parse(message.toString()));
+			callback(message.toString());
 		});
 	});
 };

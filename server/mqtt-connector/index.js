@@ -18,16 +18,19 @@ const connect = ({
 		lastWillPayload,
 		certKey,
 		certCert
-	}
+	},
+	callback
 }) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		const username = `${iotHubUrl}/${clientId}/api-version=2016-11-14`;
 		const certKeyContent = fs.readFileSync(certKey, 'utf-8').toString();
 		const certCertContent = fs.readFileSync(certCert, 'utf-8').toString();
 		const existingClient = clientStore.getClient(clientId);
 
 		if (existingClient) {
-			resolve();
+			console.log('disconnecting....');
+			await disconnect({clientId});
+			console.log('disconnected');
 		}
 
 		const client = mqtt.connect(iotHubBroker, {
@@ -47,33 +50,40 @@ const connect = ({
 		fs.unlinkSync(certCert);
 
 		client.on('connect', () => {
-			clientStore.addClient(clientId, client);
-			resolve();
-		});
-	});
-};
+			if (!client.hasSubscription) {
+				console.log('subscribing');
 
-const consume = ({clientId, callback}) => {
-	return new Promise((resolve, reject) => {
-		const client = clientStore.getClient(clientId);
+				const subscriptionTopic = getSubscriptionTopic(clientId);
 
-		if (!client) {
-			reject('No Client connected');
-		}
+				client.subscribe(subscriptionTopic, function(err) {
+					if (!err) {
+						console.log(
+							'successfully subscribed to',
+							subscriptionTopic
+						);
 
-		const subscriptionTopic = getSubscriptionTopic(clientId);
+						client.hasSubscription = true;
 
-		client.subscribe(subscriptionTopic, function(err) {
-			if (!err) {
-				resolve();
+						resolve();
+					}
+					reject(err);
+				});
+
+				clientStore.addClient(clientId, client);
+
+				console.log('setting up message handler');
+
+				client.on('message', (topic, message) => {
+					console.log('Received message');
+
+					messageStore.addMessage(
+						clientId,
+						JSON.parse(message.toString())
+					);
+
+					callback(message.toString());
+				});
 			}
-			reject(err);
-		});
-
-		client.on('message', (topic, message) => {
-			console.log('Received message');
-			messageStore.addMessage(clientId, JSON.parse(message.toString()));
-			callback(message.toString());
 		});
 	});
 };
@@ -88,6 +98,7 @@ const disconnect = ({clientId}) => {
 
 		client.end(true);
 		clientStore.removeClient(clientId);
+		messageStore.resetMessages(clientId);
 
 		resolve();
 	});
@@ -116,6 +127,12 @@ const publish = ({clientId, topic, content}) => {
 };
 
 const getMessages = ({clientId}) => {
+	const client = clientStore.getClient(clientId);
+
+	if (!client) {
+		throw 'No client connected!';
+	}
+
 	return messageStore.getMessages(clientId);
 };
 
@@ -127,7 +144,6 @@ module.exports = {
 	connect,
 	disconnect,
 	publish,
-	consume,
 	getMessages,
 	resetMessages
 };

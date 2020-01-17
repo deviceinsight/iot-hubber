@@ -47,6 +47,10 @@ app.post(
 			const {clientId, lastWillTopic, lastWillPayload} = req.body;
 			const {certCert, certKey} = req.files;
 
+			const callback = message => {
+				socket.emit(websocketTopic, message);
+			};
+
 			await mqttConnector.connect({
 				config: {
 					iotHubUrl,
@@ -58,7 +62,8 @@ app.post(
 					lastWillPayload,
 					certKey: certKey[0].path,
 					certCert: certCert[0].path
-				}
+				},
+				callback
 			});
 
 			res.json({
@@ -111,38 +116,22 @@ process.on('uncaughtException', function(err) {
 	console.log('Caught exception: ', err);
 });
 
-app.post('/consume', (req, res) => {
-	const {clientId} = req.body;
-	const callback = message => {
-		socket.emit(websocketTopic, message);
-	};
-
-	mqttConnector
-		.consume({clientId, callback})
-		.then(() => {
-			res.json({
-				status: 'CONSUMING'
-			});
-		})
-		.catch(err => handleError('CONSUMING ERROR', err, res));
-});
-
 app.get('/messages/:urn', (req, res) => {
 	const clientId = req.params.urn;
-
-	res.json({
-		messages: mqttConnector.getMessages({clientId}) || []
-	});
+	try {
+		mqttConnector.getMessages({clientId});
+		res.json({
+			messages: mqttConnector.getMessages({clientId}) || []
+		});
+	} catch (err) {
+		handleError('GET MESSAGES ERROR', err, res);
+	}
 });
 
 app.delete('/messages/:urn', (req, res) => {
 	const clientId = req.params.urn;
 
 	mqttConnector.resetMessages({clientId});
-
-	res.json({
-		status: 'MESSAGES_DELETED'
-	});
 });
 
 // START SERVER

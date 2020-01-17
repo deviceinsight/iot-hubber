@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {MessageBox, LabelledBox, Box} from 'components';
-import {consume} from 'api/api';
 import {subscribeToSocket} from 'api/socket';
 
 class Consumer extends React.Component {
@@ -11,12 +10,7 @@ class Consumer extends React.Component {
 	};
 
 	componentDidMount() {
-		const {clientId} = this.props;
 		subscribeToSocket(this.handleMessage);
-
-		consume(clientId).then(response => {
-			this.setState({consuming: response.data.status});
-		});
 	}
 
 	componentWillUnmount() {

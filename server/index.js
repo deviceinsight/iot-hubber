@@ -48,7 +48,9 @@ app.post(
 			const {certCert, certKey} = req.files;
 
 			const callback = message => {
-				socket.emit(websocketTopic, message);
+				if (socket) {
+					socket.emit(websocketTopic, message);
+				}
 			};
 
 			await mqttConnector.connect({

@@ -40,7 +40,3 @@ export const produce = ({clientId, topic, content}) => {
 	const payload = content.replace(/\s+(?=([^"]*"[^"]*")*[^"]*$)/g, '');
 	return axios.post('/produce', {clientId, topic, content: payload});
 };
-
-export const consume = clientId => {
-	return axios.post('/consume', {clientId});
-};

@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"description": "Graphical IOT Hub Connection Client",
 	"scripts": {
-		"start-server": "node server"
+		"start-server": "node server",
+		"test": "yarn mocha --recursive '*/*.spec.js'"
 	},
 	"author": "jro, vhi",
 	"license": "ISC",
@@ -14,7 +15,10 @@
 		"express": "^4.16.4",
 		"http": "^0.0.0",
 		"mqtt": "^2.18.8",
-		"multer": "^1.4.1",
+		"multer": "^1.4.2",
 		"socket.io": "^2.2.0"
+	},
+	"devDependencies": {
+		"mocha": "^6.2.3"
 	}
 }

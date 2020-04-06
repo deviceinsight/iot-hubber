@@ -5,7 +5,8 @@ COPY . /tmp/wip/
 
 WORKDIR /tmp/wip
 RUN yarn predocker --pure-lockfile
-RUN mv client/build/* /usr/share/nginx/html
+RUN mkdir /usr/share/nginx/html/iot-hubber
+RUN mv client/build/* /usr/share/nginx/html/iot-hubber
 RUN mv nginx/default.conf /etc/nginx/conf.d/default.conf
 RUN mv server /usr/share/server
 

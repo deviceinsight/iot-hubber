@@ -2,7 +2,8 @@
   font-family: 'Maven Pro';
 }
 
-html, body {
+html,
+body {
   box-sizing: border-box;
 }
 
@@ -17,15 +18,21 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+@import '../node_modules/bootstrap/scss/mixins';
+@import '../node_modules/bootstrap/scss/forms';
 
 .App {
   font-family: 'Roboto';
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  @media (min-height: 720px) and (min-width: 1024px) {
+    justify-content: center;
+  }
   height: 100vh;
 
   @for $i from 1 through 5 {
@@ -38,14 +45,14 @@ code {
   .page {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 50%;
     border-bottom: 1px solid grey;
 
     h1 {
       color: white;
       margin: 0;
       padding: 5px 20px;
-      font-size: 16px;  
+      font-size: 16px;
       background-color: steelblue;
     }
 

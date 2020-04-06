@@ -14,7 +14,9 @@ const mqttConnector = require('./mqtt-connector');
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, {
+	path: '/iot-hubber/api/socket.io/'
+});
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const cors = require('cors');
@@ -45,6 +47,12 @@ app.post(
 			const {clientId, lastWillTopic, lastWillPayload} = req.body;
 			const {certCert, certKey} = req.files;
 
+			const callback = message => {
+				if (socket) {
+					socket.emit(websocketTopic, message);
+				}
+			};
+
 			await mqttConnector.connect({
 				config: {
 					iotHubUrl,
@@ -56,7 +64,8 @@ app.post(
 					lastWillPayload,
 					certKey: certKey[0].path,
 					certCert: certCert[0].path
-				}
+				},
+				callback
 			});
 
 			res.json({
@@ -109,18 +118,22 @@ process.on('uncaughtException', function(err) {
 	console.log('Caught exception: ', err);
 });
 
-app.post('/consume', (req, res) => {
-	const {clientId} = req.body;
-	const callback = message => socket.emit(websocketTopic, message);
+app.get('/messages/:urn', (req, res) => {
+	const clientId = req.params.urn;
+	try {
+		mqttConnector.getMessages({clientId});
+		res.json({
+			messages: mqttConnector.getMessages({clientId}) || []
+		});
+	} catch (err) {
+		handleError('GET MESSAGES ERROR', err, res);
+	}
+});
 
-	mqttConnector
-		.consume({clientId, callback})
-		.then(() => {
-			res.json({
-				status: 'CONSUMING'
-			});
-		})
-		.catch(err => handleError('CONSUMING ERROR', err, res));
+app.delete('/messages/:urn', (req, res) => {
+	const clientId = req.params.urn;
+
+	mqttConnector.resetMessages({clientId});
 });
 
 // START SERVER
